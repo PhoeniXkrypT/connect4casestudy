@@ -1,0 +1,54 @@
+{% extends 'connect4/base.html' %}
+
+{% block content %}
+
+<style>
+form{ float: right;}
+</style>
+<form action="{% url 'logout' %}"><button type="submit">Log Out!</button></form>
+
+<p><h3> Username: {{user.username}} </h3></p>
+
+<div class="container">
+  <style>
+  table {
+    font-family: sans-serif;
+    border-collapse: collapse;
+    width: 70%;
+  }
+  td, th {
+    border: 1px solid #dddddd;
+    text-align: center;
+    padding: 8px;
+  }
+  th {
+    background-color: #dddddd;
+  }
+  </style>
+
+  <p>Current games: Have Fun</p>
+  <table>
+    <tr><th>Game</th> <th>Player1</th> <th>Player2</th> <th>Status</th></tr>
+    {% for g in cur_games %}
+    <td><a href="{% url 'play' %}">{{g.id}}</a></td> <td>{{g.player1}}</td> <td>{{g.player2}}</td> <td>{{g.status}}</td>
+    {% endfor %}
+  </table>
+
+  <p>New games: Join Up</p>
+  <table>
+    <tr><th>Game</th> <th>Player1</th> <th>Player2</th> <th>Status</th></tr>
+    {% for g in join_games %}
+    <td><a href="{% url 'play' %}">{{g.id}}</a></td> <td>{{g.player1}}</td> <td>{{g.player2}}</td> <td>{{g.status}}</td>
+    {% endfor %}
+  </table>
+
+  <p>Concluded games: Game Over</p>
+  <table>
+    <tr><th>Game</th> <th>Player1</th> <th>Player2</th> <th>Winner</th></tr>
+    {% for g in concl_games %}
+    <td>{{g.id}}</td> <td>{{g.player1}}</td> <td>{{g.player2}}</td> <td>{{g.winner}}</td>
+    {% endfor %}
+  </table>
+
+</div>
+{% endblock content %}

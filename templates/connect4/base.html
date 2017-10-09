@@ -1,0 +1,15 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Games</title>
+    <p><h3>{{topic}}</h3></p>
+    {% load staticfiles %}
+    <!--<link rel='stylesheet' href="{% static 'css/bootstrap.css' type='text/css'%}"/>-->
+    {% block extrahead %}{% endblock extrahead %}
+  </head>
+  <body>
+    <div>
+    {% block content %}{% endblock content %}
+    </div>
+  </body>
+</html>

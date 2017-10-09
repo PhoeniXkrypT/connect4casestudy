@@ -1,0 +1,24 @@
+{% extends 'connect4/base.html' %}
+
+{% block content %}
+<div class="container">
+  {% load static %}
+  <img src="{% static "images/board.png" %}" alt="board_img" align="middle"/>
+  <br>
+  <form action="{% url 'play' %}">
+  <input name="0" value=0 type="button"/>
+  <input name="1" value=1 type="button"/>
+  <input name="2" value=2 type="button"/>
+  <input name="3" value=3 type="button"/>
+  <input name="4" value=4 type="button"/>
+  <input name="5" value=5 type="button"/>
+  <input name="6" value=6 type="button"/>
+  <!--<button type='button'>6</button>-->
+  </form>
+</div>
+<script type="test/javascript">
+function refreshBoard(val){
+  $('.ajaxProgress').show();
+}
+</script>
+{% endblock content %}

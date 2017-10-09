@@ -10,17 +10,16 @@ from django.db import models
 class Game(models.Model):
     player1 = models.ForeignKey(User, on_delete=models.CASCADE, related_name='player_1')
     player2 = models.ForeignKey(User, on_delete=models.CASCADE, related_name='player_2', blank=True, null=True)
-    status = models.CharField(max_length=10)
-    winner = models.CharField(max_length=10)
+    status = models.CharField(max_length=10, default='New')
+    winner = models.CharField(max_length=10, default='None')
     created_date = models.DateTimeField(default=timezone.now)
-
 
     def __str__(self):
         if self.player2:
-            return ' vs '.join([self.player1.get_full_name(), self.player2.get_full_name()])
+            return ' vs '.join([self.player1.username, self.player2.username])
 
         else:
-            return 'Join now to play %s'%self.player1.get_short_name()
+            return 'Join now to play %s'%self.player1.username
 
     @property
     def start_date(self):
@@ -60,5 +59,5 @@ class Coin(models.Model):
 
     def __str__(self):
         return ' '.join([
-            self.player, 'to', self.row, self.column
+            self.player.username, 'to', str(self.row), str(self.column)
         ])
