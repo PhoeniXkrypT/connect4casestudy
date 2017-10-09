@@ -97,7 +97,7 @@ def _game_won(board, i, j):
     return False
 
 def _fill_board(coins):
-    board = [['-' for _ in xrange(COLS)] for _ in xrange(ROWS)]
+    board = [['--' for _ in xrange(COLS)] for _ in xrange(ROWS)]
     for each in coins.values():
         board[each['row']][each['column']] = each['player_id']
     return board
@@ -110,28 +110,31 @@ def play(request):
     :return:
     """
     # print gid
-    gid, col = 1, 0
+    gid = 1
     context = {'topic': 'Play'}
     game = models.Game.objects.get(id=gid)
     currentplayer = game.player1
-    # currentplayer = game.player1 if game.last_move.player == game.player2 \
-                    # else game.player2
-    row, r_val = 0, game.coin_set.filter(column=col)
-    if r_val:
-        row = r_val.order_by('-row')[0].row + 1
-    if row >= ROWS:
-        context['message'] = "Invalid move! Column %d is full." % (col)
-    else:
-        # game.make_move(currentplayer, row, col)
-        board = _fill_board(game.coin_set)
-        print board
-        print row, col
-        print _game_won(board, row-1, col)
-        # if _game_won(board, row, col):
-            # game.status = 'Over'
-            # game.winner = currentplayer
-            # game.save()
+    board = _fill_board(game.coin_set)
+    currentplayer = game.player1 if game.last_move.player == game.player2 \
+                    else game.player2
 
+    if request.method == 'POST':
+        col = int(request.POST.get('move'))
+        row, r_val = 0, game.coin_set.filter(column=col)
+        if r_val:
+            row = r_val.order_by('-row')[0].row + 1
+        if row >= ROWS:
+            context['message'] = "Invalid move! Column %d is full." % (col)
+        else:
+            game.make_move(currentplayer, row, col)
+            board = _fill_board(game.coin_set)
+            if _game_won(board, row, col):
+                game.status = 'Over'
+                game.winner = currentplayer
+                game.save()
+                context['won'] = 'User%s WON!!!' % (currentplayer)
+
+    context['board'] = board[::-1]
     print "CURRENT: ", currentplayer, "\nGAME: ", game
     return render(request, 'connect4/play.html', context)
 

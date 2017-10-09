@@ -11,7 +11,7 @@ class Game(models.Model):
     player1 = models.ForeignKey(User, on_delete=models.CASCADE, related_name='player_1')
     player2 = models.ForeignKey(User, on_delete=models.CASCADE, related_name='player_2', blank=True, null=True)
     status = models.CharField(max_length=10, default='New')
-    winner = models.CharField(max_length=10, default='None')
+    winner = models.ForeignKey(User, default='None')
     created_date = models.DateTimeField(default=timezone.now)
 
     def __str__(self):
